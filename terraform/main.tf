@@ -69,40 +69,40 @@ resource "aws_instance" "strapi_server" {
   instance_type          = "t2.micro"
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.strapi_sg.id]
+  user_data_replace_on_change = true
 
-   user_data = <<-EOF
-              #!/bin/bash
+user_data = <<-EOF
+#!/bin/bash
 
-              apt update -y
-              apt install -y docker.io
+apt update -y
+apt install -y docker.io
+systemctl start docker
+systemctl enable docker
+usermod -aG docker ubuntu
 
-              systemctl start docker
-              systemctl enable docker
+fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
 
-            
-              fallocate -l 2G /swapfile
-              chmod 600 /swapfile
-              mkswap /swapfile
-              swapon /swapfile
-              echo '/swapfile none swap sw 0 0' >> /etc/fstab
-              sysctl vm.swappiness=10
-              echo 'vm.swappiness=10' >> /etc/sysctl.conf
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
+sysctl vm.swappiness=10
+echo 'vm.swappiness=10' >> /etc/sysctl.conf
 
-            
-              docker pull jeevanc31/strapi-app:latest
+docker pull ${var.image_tag}
 
-          
-              docker run -d -p 1337:1337 \
-                -e HOST=0.0.0.0 \
-                -e PORT=1337 \
-                -e APP_KEYS="appKey1,appKey2,appKey3,appKey4" \
-                -e API_TOKEN_SALT="salt" \
-                -e ADMIN_JWT_SECRET="adminSecret" \
-                -e JWT_SECRET="jwtSecret" \
-                --restart unless-stopped \
-                --name strapi \
-                jeevanc31/strapi-app:latest
-              EOF
+docker run -d -p 1337:1337 \
+  -e HOST=0.0.0.0 \
+  -e PORT=1337 \
+  -e APP_KEYS="appKey1,appKey2,appKey3,appKey4" \
+  -e API_TOKEN_SALT="salt" \
+  -e ADMIN_JWT_SECRET="adminSecret" \
+  -e JWT_SECRET="jwtSecret" \
+  --restart unless-stopped \
+  --name strapi \
+  ${var.image_tag}
+
+EOF
 
 
   tags = {

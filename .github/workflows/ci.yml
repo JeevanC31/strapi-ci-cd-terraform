@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      image_tag: ${{ steps.meta.outputs.tag }}
+      image_tag: ${{ steps.set_tag.outputs.tag }}
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Set Image Tag
-        id: meta
+        id: set_tag
         run: echo "tag=${GITHUB_SHA}" >> $GITHUB_OUTPUT
 
       - name: Login to DockerHub
@@ -28,8 +28,8 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/strapi-app:${{ steps.meta.outputs.tag }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/strapi-app:${{ steps.set_tag.outputs.tag }} .
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/strapi-app:${{ steps.meta.outputs.tag }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/strapi-app:${{ steps.set_tag.outputs.tag }}

@@ -1,4 +1,4 @@
-variable "key_name" {
-  description = "EC2 Key Pair Name"
+variable "image_tag" {
+  description = "Docker image tag"
   type        = string
 }
