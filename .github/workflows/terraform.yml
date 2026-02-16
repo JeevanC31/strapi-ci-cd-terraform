@@ -28,7 +28,4 @@ jobs:
 
       - name: Terraform Apply
         working-directory: terraform
-        run: |
-          terraform apply -auto-approve \
-          -var="key_name=key-jeevan" \
-          -var="image_tag=${IMAGE_TAG}"
+        run: terraform apply -auto-approve -var="key_name=key-jeevan" -var="image_tag=${IMAGE_TAG}"
