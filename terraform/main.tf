@@ -92,15 +92,15 @@ echo 'vm.swappiness=10' >> /etc/sysctl.conf
 docker pull ${var.image_tag}
 
 docker run -d -p 1337:1337 \
-  -e HOST=0.0.0.0 \
-  -e PORT=1337 \
-  -e APP_KEYS="appKey1,appKey2,appKey3,appKey4" \
-  -e API_TOKEN_SALT="salt" \
-  -e ADMIN_JWT_SECRET="adminSecret" \
-  -e JWT_SECRET="jwtSecret" \
-  --restart unless-stopped \
-  --name strapi \
-  ${var.image_tag}
+-e HOST=0.0.0.0 \
+-e PORT=1337 \
+-e APP_KEYS="appKey1,appKey2,appKey3,appKey4" \
+-e API_TOKEN_SALT="salt" \
+-e ADMIN_JWT_SECRET="adminSecret" \
+-e JWT_SECRET="jwtSecret" \
+--restart unless-stopped \
+--name strapi \
+jeevanc31/strapi-app:${var.image_tag}
 
 EOF
 
