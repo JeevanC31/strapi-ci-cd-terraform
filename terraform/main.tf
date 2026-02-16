@@ -73,25 +73,37 @@ resource "aws_instance" "strapi_server" {
    user_data = <<-EOF
               #!/bin/bash
 
-             
               apt update -y
-
-             
               apt install -y docker.io
+
               systemctl start docker
               systemctl enable docker
-              usermod -aG docker ubuntu
 
+            
               fallocate -l 2G /swapfile
               chmod 600 /swapfile
               mkswap /swapfile
               swapon /swapfile
-
               echo '/swapfile none swap sw 0 0' >> /etc/fstab
               sysctl vm.swappiness=10
               echo 'vm.swappiness=10' >> /etc/sysctl.conf
 
+            
+              docker pull jeevanc31/strapi-app:latest
+
+          
+              docker run -d -p 1337:1337 \
+                -e HOST=0.0.0.0 \
+                -e PORT=1337 \
+                -e APP_KEYS="appKey1,appKey2,appKey3,appKey4" \
+                -e API_TOKEN_SALT="salt" \
+                -e ADMIN_JWT_SECRET="adminSecret" \
+                -e JWT_SECRET="jwtSecret" \
+                --restart unless-stopped \
+                --name strapi \
+                jeevanc31/strapi-app:latest
               EOF
+
 
   tags = {
     Name = "StrapiServer"
