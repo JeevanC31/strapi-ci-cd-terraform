@@ -76,7 +76,7 @@ This project demonstrates a complete DevOps pipeline to build, push, and deploy 
 - Pulls correct image
 - Runs Strapi container
 
----
+
 
 ##  AWS Infrastructure
 
