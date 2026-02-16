@@ -36,7 +36,8 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve \
-             -var="key_name=key-jeevan" \
-             -var="image_tag=${{ needs.build.outputs.image_tag }}"
-        working-directory: terraform
+  run: |
+    terraform apply -auto-approve \
+    -var="key_name=key-jeevan" \
+    -var="image_tag=${IMAGE_TAG}"
+  working-directory: terraform
