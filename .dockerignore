@@ -1,0 +1,5 @@
+node_modules
+strapi-app/node_modules
+strapi-app/.tmp
+strapi-app/dist
+.git
